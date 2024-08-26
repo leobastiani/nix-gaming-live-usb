@@ -6,24 +6,21 @@
   # tradeoff acceptable because we don't want to distribute
   # default is xz which is very slow
   isoImage.squashfsCompression = "zstd -Xcompression-level 6";
-  
+
   # my azerty keyboard
   i18n.defaultLocale = "pt_BR.UTF-8";
   services.xserver.layout = "br";
   console = {
     keyMap = "br-abnt2";
   };
-  
+
   # xanmod kernel for better performance
   # see https://xanmod.org/
   boot.kernelPackages = pkgs.linuxPackages_xanmod;
-  
-  # prevent GPU to stay at 100% performance
-  hardware.nvidia.powerManagement.enable = true;
-  
+
   # sound support
   hardware.pulseaudio.enable = true;
- 
+
   # getting IP from dhcp
   # no network manager
   networking.dhcpcd.enable = true;
@@ -48,10 +45,10 @@
   services.xserver.displayManager.lightdm.enable = true;
   services.xserver.enable = true;
   services.xserver.libinput.enable = true;
-  services.xserver.videoDrivers = [ "nvidia" ];
-  services.xserver.xkbOptions = "eurosign:e";
+  services.xserver.videoDrivers = [ "modesetting" "amdgpu" "intel" ];
+  systemd.services.display-manager.enable = true;
 
-  time.timeZone = "Europe/Paris";
+  time.timeZone = "America/Sao_Paulo";
 
   # declare the gaming user and its fixed password
   users.mutableUsers = false;
@@ -67,18 +64,6 @@
     user = "gaming";
   };
 
-  # mount the NFS before login
-  systemd.services.mount-gaming = {
-    path = with pkgs; [ nfs-utils ];
-    serviceConfig.Type = "oneshot";
-    script = ''
-      mount.nfs -o fsc,nfsvers=4.2,wsize=1048576,rsize=1048576,async,noatime t470-eth.local:/home/jeux/ /home/jeux/
-    '';
-    before = [ "display-manager.service" ];
-    wantedBy = [ "display-manager.service" ];
-    after = [ "network-online.target" ];
-  };
-
   # useful packages
   environment.systemPackages = with pkgs; [
     bwm_ng
@@ -92,7 +77,6 @@
     mangohud
     minigalaxy
     ncdu
-    nfs-utils
     steam
     steam-run
     tmux
