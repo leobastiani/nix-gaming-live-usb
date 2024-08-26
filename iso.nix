@@ -8,10 +8,10 @@
   isoImage.squashfsCompression = "zstd -Xcompression-level 6";
   
   # my azerty keyboard
-  i18n.defaultLocale = "fr_FR.UTF-8";
-  services.xserver.layout = "fr";
+  i18n.defaultLocale = "pt_BR.UTF-8";
+  services.xserver.layout = "br";
   console = {
-    keyMap = "fr";
+    keyMap = "br-abnt2";
   };
   
   # xanmod kernel for better performance
